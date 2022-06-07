@@ -7,6 +7,6 @@
  e a função que deve ser usada
 */
 
-double i_seq(double, int, double (*)(double));
+double int_seq(double, int, double (*)(double));
 
 #endif
