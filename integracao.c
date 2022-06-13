@@ -37,25 +37,23 @@ void choice() {
   }
 }
 
-void allocateMemory(long double *v, long long int t) {
-  v = (long double *) malloc(sizeof(long double) * (t+1));
-  if (v == NULL) { printf("ERRO -- malloc\n"); return 2; }
-}
+void allocate_initialize(long double **v, long long int t, long double a, long double b) {
+  (*v) = (long double *) malloc(sizeof(long double) * (t+1));
+  if ((*v) == NULL) { printf("ERRO -- malloc\n"); exit(-1); }
 
-void initialize(long double *v, long double a, long double b, long long int t) {
   long double intervalo = (b - a) / t;
   long long int i;
 
   for(i = 0; i <= t; i++) {
-    if(i == 0) { v[i] = a; }
-    else if(i == t) { v[i] = b; }
-    else { v[i] = v[i-1]+intervalo; };
+    if(i == 0) { (*v)[i] = a; }
+    else if(i == t) { (*v)[i] = b; }
+    else { (*v)[i] = (*v)[i-1]+intervalo; };
   }
 }
 
 int main(int argc, char *argv[]) {
   long long int t;
-  int i, nthreads;
+  int nthreads;
   long double a, b, res_seq, res_conc, *v;
   double ini, fim, t_seq, t_conc;
 
@@ -72,28 +70,25 @@ int main(int argc, char *argv[]) {
   t = atoi(argv[3]);
   nthreads = atoi(argv[4]);
 
-  // aloca memoria para o array
-  allocateMemory(&v, t);
-
-  // inicializa o array
-  initialize(&v, a, b, t);
+  // aloca memoria para o array e o inicializa
+  allocate_initialize(&v, t, a, b);
 
   // calculo sequencial com get_time
   GET_TIME(ini);
-  res_seq = int_seq(&v, t, f);
+  res_seq = int_seq(v, t, f);
   GET_TIME(fim);
   t_seq = fim = ini;
 
   // calculo concorrente com get_time
   GET_TIME(ini);
-  res_conc = int_conc(nthreads, &v, t, f);
+  res_conc = int_conc(nthreads, v, t, f);
   GET_TIME(fim);
   t_conc = fim - ini;
 
   // print dos resultados e comparacoes
   printf("Soma S: %.2Lf \n", res_seq);
   printf("Soma C: %.2Lf \n", res_conc);
-  printf("Tempo S: %f \n", t_conc);
+  printf("Tempo S: %f \n", t_seq);
   printf("Tempo C: %f \n", t_conc);
   
   free(v);

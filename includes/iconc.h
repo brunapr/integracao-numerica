@@ -7,6 +7,6 @@
  e a função que deve ser usada
 */
 
-long double int_conc(int nthreads, long double*, long long int, long double (*)(double));
+long double int_conc(int nthreads, long double*, long long int, long double (*)(long double));
 
 #endif

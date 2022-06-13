@@ -6,6 +6,6 @@
   dados e o ponto médio deles
 */
 
-double area(double, double, double (*)(double));
+long double area(long double, long double, long double (*)(long double));
 
 #endif

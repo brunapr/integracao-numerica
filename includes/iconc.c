@@ -21,7 +21,7 @@ void * integra() {
   while(i < t) {
     a = v[i];
     b = v[i+1];
-    soma = area(a, b);
+    soma = area(a, b, f);
 
     pthread_mutex_lock(&lock);
     c_soma = c_soma + soma;
@@ -32,7 +32,7 @@ void * integra() {
   pthread_exit(NULL);
 }
 
-long double int_conc(int nthreads, long double *vet, long long int tra, long double (*func)(double)) {
+long double int_conc(int nthreads, long double *vet, long long int tra, long double (*func)(long double)) {
   int i, j;
   pthread_t *tid;
 
@@ -47,7 +47,7 @@ long double int_conc(int nthreads, long double *vet, long long int tra, long dou
   if( tid == NULL ) { fprintf(stderr, "ERRO--malloc\n"); return 2;}
 
   for(i=0; i<nthreads; i++) {
-    if (pthread_create(tid+i, NULL, int_conc, NULL)) {
+    if (pthread_create(tid+i, NULL, integra, NULL)) {
       printf("--ERRO: pthread_create()\n"); return 2;
     };
   };
