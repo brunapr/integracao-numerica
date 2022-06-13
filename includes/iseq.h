@@ -1,5 +1,5 @@
-#ifndef INTESEQ_H_
-#define INTESEQ_H_
+#ifndef ISEQ_H_
+#define ISEQ_H_
 
 /*
  Função sequencial
@@ -7,6 +7,6 @@
  e a função que deve ser usada
 */
 
-double int_seq(double, int, double (*)(double));
+long double int_seq(long double*, long long int, long double (*)(double));
 
 #endif

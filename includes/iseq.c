@@ -1,10 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include "utils.h"
 #include "iseq.h"
 
-double int_seq(double *v, int r, double (*f)(double)) {
-  double a, b, soma = 0;
+long double int_seq(long double *v, long long int r, long double (*f)(double)) {
+  long double a, b, soma = 0;
   int i;
 
   // soma das areas

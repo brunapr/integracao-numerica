@@ -5,10 +5,10 @@
   Funções que serão usadas como teste
 */
 
-double f_a(double);
-double f_b(double);
-double f_c(double);
-double f_d(double);
-double f_e(double);
+long double f_a(long double);
+long double f_b(long double);
+long double f_c(long double);
+long double f_d(long double);
+long double f_e(long double);
 
 #endif
