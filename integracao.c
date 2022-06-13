@@ -5,25 +5,14 @@
 #include "includes/funcs.h"
 #include "includes/iseq.h"
 #include "includes/iconc.h"
+#include "includes/welcome.h"
 
 #define OPTION_LENGTH 1
 
 long double (*f)(long double);
 
-void choice() {
-  int choice = 0;
-
-  printf("Funcoes (1-5): \n");
-  printf("1: x^2 + x -1\n");
-  printf("2: 3x^4\n");
-  printf("3: sqrt(x^4 + 2)\n");
-  printf("4: sin(3x - 2)\n");
-  printf("5: cos(e^{-1}(0.005x^3 + 1))\n");
-  printf("Sua escolha: ");
-
-  scanf("%d", &choice);
-
-  switch (choice) {
+void choice(int c) {
+  switch (c) {
     case 1:
       f = f_a; break;
     case 2:
@@ -53,22 +42,26 @@ void allocate_initialize(long double **v, long long int t, long double a, long d
 
 int main(int argc, char *argv[]) {
   long long int t;
-  int nthreads;
+  int nthreads, c;
   long double a, b, res_seq, res_conc, *v;
   double ini, fim, t_seq, t_conc;
 
-  // usuario escolhe func (a - e)
-  choice();
+  // printa a primeira tela
+  welcome();
 
-  if (argc < 5) {
-    fprintf(stderr, "Digite: %s <a> <b> <n° retangulos> <n° threads> \n", argv[0]);
+  if (argc < 6) {
+    fprintf(stderr, "Digite: %s <(1-5)> <a> <b> <n° trapezios> <n° threads> \n", argv[0]);
     return 1;
   }
 
-  a = atof(argv[1]);
-  b = atof(argv[2]);
-  t = atoi(argv[3]);
-  nthreads = atoi(argv[4]);
+  c = atoi(argv[1]);
+  a = atof(argv[2]);
+  b = atof(argv[3]);
+  t = atoi(argv[4]);
+  nthreads = atoi(argv[5]);
+
+  // trata a funcao escolhida e define ela com as disponiveis
+  choice(c);
 
   // aloca memoria para o array e o inicializa
   allocate_initialize(&v, t, a, b);
@@ -77,7 +70,7 @@ int main(int argc, char *argv[]) {
   GET_TIME(ini);
   res_seq = int_seq(v, t, f);
   GET_TIME(fim);
-  t_seq = fim = ini;
+  t_seq = fim - ini;
 
   // calculo concorrente com get_time
   GET_TIME(ini);
