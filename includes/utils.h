@@ -8,4 +8,16 @@
 
 long double area(long double, long double, long double (*)(long double));
 
+/*
+  Função que testará a corretude dos resultados
+*/
+
+void corretude(long double, long double);
+
+/*
+  Função que retornará o tempo e aceleração dos resultados
+*/
+
+void tempo(double, double);
+
 #endif
