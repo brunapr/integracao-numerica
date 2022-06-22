@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
   double ini, fim, t_seq, t_conc;
 
   // printa a primeira tela
-  welcome();
+  // welcome();
 
   if (argc < 6) {
     fprintf(stderr, "Digite: %s <(1-5)> <a> <b> <n° trapezios> <n° threads> \n", argv[0]);

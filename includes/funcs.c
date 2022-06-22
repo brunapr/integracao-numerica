@@ -20,5 +20,3 @@ long double f_d(long double x) {
 long double f_e(long double x) {
   return (cos(pow(M_E, -x))) * (0.005 * pow(x, 3) + 1);
 }
-
-
