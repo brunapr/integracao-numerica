@@ -5,27 +5,27 @@
 #include "utils.h"
 #include "iconc.h"
 
-long long int t, global = 0; // numero de trapezios e var compartilhada
-long double *v, g_soma = 0; // vetor de intervalos e soma concorrente
+long long int retangulos, global = 0; // numero de retangulos e var compartilhada
+long double *vetor, g_soma = 0; // vetor de intervalos e soma concorrente
 long double (*f)(long double); // funcao que sera integrada
-int n; // numero de threads
+int nthreads; // numero de threads
 pthread_mutex_t lock; // variavel de lock para exclusao mutua
 
 void * integra(void *arg) {
   int id = *(int*) arg; // identifica a thread
-  long long int block = t/n; //tamanho do bloco
+  long long int block = retangulos/nthreads; //tamanho do bloco
   long long int ini = id*block; //elemento inicial do bloco
   long long int fim; // elemento final (nao processado) do bloco
   long double a, b, soma = 0; // intervalos e soma local
 
   //trata se tiver resto
-  if (id == n-1) fim = t;
+  if (id == nthreads-1) fim = retangulos;
   else fim = ini+block;
 
   // faz o calculo da integral e incrementa a soma
   for(long long int i = ini; i < fim; i++) {
-    a = v[i];
-    b = v[i+1];
+    a = vetor[i];
+    b = vetor[i+1];
     soma = soma + area(a, b, f);
   }
 
@@ -37,36 +37,36 @@ void * integra(void *arg) {
   pthread_exit(NULL);
 }
 
-long double int_conc(int nthreads, long double *vet, long long int tra, long double (*func)(long double)) {
+long double int_conc(int n, long double *v, long long int r, long double (*func)(long double)) {
   int i, j;
   pthread_t *tid;
 
-  v = vet;
-  t = tra;
+  vetor = v;
+  retangulos = r;
   f = func;
-  n = nthreads;
+  nthreads = n;
 
   // inicializa mutex
   pthread_mutex_init(&lock, NULL);
 
   // aloca memoria para as threads 
-  tid = (pthread_t*) malloc(sizeof(pthread_t)*n);
-  if( tid == NULL ) { fprintf(stderr, "ERRO--malloc\n"); return 2;}
+  tid = (pthread_t*) malloc(sizeof(pthread_t)*nthreads);
+  if( tid == NULL ) { fprintf(stderr, "ERRO--malloc\nthreads"); return 2;}
 
-  int array[n];
+  int array[nthreads]; // array com os indices das threads
   
   // cria as threads
-  for(i=0; i<n; i++) {
+  for(i=0; i<nthreads; i++) {
     array[i] = i;
     if (pthread_create(tid+i, NULL, integra, (void*) &array[i])) {
-      printf("--ERRO: pthread_create()\n"); return 2;
+      printf("--ERRO: pthread_create()\nthreads"); return 2;
     };
   };
 
   //espera todas as threads terminarem
-  for (j=0; j<n; j++) {
+  for (j=0; j<nthreads; j++) {
     if (pthread_join(*(tid+j), NULL)) {
-         printf("--ERRO: pthread_join()\n"); return 2; 
+         printf("--ERRO: pthread_join()\nthreads"); return 2; 
     } 
   } 
 
