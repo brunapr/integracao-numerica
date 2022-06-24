@@ -15,7 +15,7 @@ void corretude(long double seq, long double conc) {
 }
 
 void tempo(double seq, double conc) {
-  double ace = seq - conc;
+  double ace = seq / conc;
   printf("Tempo sequencial: %.4f \n", seq);
   printf("Tempo concorrente: %.4f \n", conc);
   printf("Aceleração: %.4f \n", ace);
